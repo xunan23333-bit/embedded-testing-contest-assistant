@@ -1,6 +1,6 @@
 # 软件测试大赛嵌入式赛项助手 · Embedded Testing Contest Assistant
 
-面向全国大学生软件测试大赛嵌入式赛项的 AI Skill 与 ETest5 工具集。它把环境检查、工程导入、串口与协议分析、测试脚本执行、覆盖情况排查、问题报告和结果导出串成一套可复用的工作流，适合使用 ETest5 的预选赛、省赛备赛及授权实验。
+面向全国大学生软件测试大赛嵌入式赛项的全流程自动化 AI Skill。安装到支持 Skill 的 AI Agent 后，提供赛题和工作环境，Agent 将自主推进环境检查、工程导入、测试设计与执行、覆盖排查、缺陷报告和结果交付。适用于使用 ETest5 的预选赛、省赛及授权练习。
 
 > 赛题、平台版本和规则可能不同。使用前请核对当届赛事要求及允许使用的工具；案例成绩仅代表原有记录，不保证其他赛题获得相同结果。
 
@@ -12,13 +12,13 @@
 - **处理运行障碍**：辅助诊断任务阻塞、端口绑定和窗口弹框等问题。
 - **整理交付**：导出工程结果包；在环境和规则允许时辅助上传，并依据实际复现结果整理问题报告。
 
-`SKILL.md` 提供给 AI 助手工作流；`scripts/` 是本地辅助工具，既可供助手调用，也可由使用者在终端运行。工具针对历史 ETest5 环境编写，不保证兼容所有平台版本或被测件。
+`SKILL.md` 是 Agent 的工作指南，`scripts/` 和 `references/` 是执行过程中按需使用的工具与参考资料。用户主要通过自然语言交代任务，无需逐条操作脚本。
 
 ## 安装 Skill
 
 1. 克隆本仓库，或下载 ZIP 并解压为 `embedded-testing-contest-assistant` 文件夹。
 2. 将整个文件夹复制到你的技能目录，例如 Codex 的 `~/.codex/skills/embedded-testing-contest-assistant/`。
-3. 刷新技能列表或重启客户端。使用时可以说：“使用 embedded-testing-contest-assistant，帮我分析这道嵌入式测试题。”
+3. 刷新技能列表或重启客户端。在对话中提供题目、工程路径和交付要求，让 Agent 使用此 Skill 完成赛题。
 
 请保留 `SKILL.md`、`scripts/`、`references/` 和 `examples/` 的相对位置。安装 Skill 不会自动安装 ETest5 或其他依赖。
 
@@ -35,39 +35,19 @@
 
 可设置 `ET5_HOME` 指向安装目录；未设置时，脚本会尝试从注册表和常见目录探测。`ET5_PY`、`ET5_LOGDIR`、`ET5_BASE`、`ET5_CDP` 等可覆盖相应默认配置，具体见 `scripts/et5env.py` 和 `SKILL.md`。
 
-## 快速开始
+## 如何使用
 
-在仓库根目录打开 PowerShell：
+安装 Skill 后，确保 Agent 能访问 Windows 上的 ETest5、赛题文件和必要的操作工具。在对话中提供题目、工程或所在路径，说明比赛阶段和需要交付的内容，例如：
 
-```powershell
-# 按实际路径修改；也可不设置并尝试自动探测
-$env:ET5_HOME = 'D:\Code\ETest5'
-python scripts/et5env.py
-python scripts/doctor.py
-```
+> 使用 embedded-testing-contest-assistant，完成这道软件测试大赛嵌入式赛题。题目和工程在 `D:\比赛\赛题`，请检查环境、执行测试并整理需要提交的材料。
 
-根据题目与实际环境，通常按以下顺序推进：
+Agent 会按需调用工具，分析赛题、执行和调整测试、核对结果并整理交付；需要登录、补充材料或遇到环境限制时，会说明具体情况。用户无需手动逐条执行脚本。实际自动化程度取决于环境、Agent 的操作权限和赛题条件；提交应遵循用户指示及当届规则。
 
-1. 阅读当前赛题、评分和提交要求，确认工具使用范围。
-2. 导入工程，检查测试序列、虚拟串口和本机通道绑定。
-3. 启动被测件，验证协议和报文收发，再编写或调整测试脚本。
-4. 执行测试、查看真实断言和可用覆盖信息，补充边界与状态测试。
-5. 复现并记录缺陷，核对结果包；按用户指示及赛事要求提交。
+## 工作流程
 
-常用命令示例（尖括号内容为需要替换的参数，不能原样运行）：
+读取题目与规则 → 检查环境 → 导入并配置工程 → 分析协议与测试点 → 执行测试和排查覆盖 → 复现缺陷、整理报告 → 导出并核对交付物。
 
-```text
-python scripts/setup.py import <工程ZIP>
-python scripts/setup.py info <项目ID>
-python scripts/run.py cards
-python scripts/run.py bind <项目ID> 通道名=COM2 --card <本机卡ID> --relines
-python scripts/protocol.py <项目ID> --list
-python scripts/run.py one <项目ID> <序列编号> --timeout 300
-python scripts/flags.py
-python scripts/submit.py export <项目ID> <输出ZIP>
-```
-
-`flags.py` 和 `score_tcp.py` 依赖被测件提供兼容的本地接口，并非所有赛题都可用。`score.py` 通过客户端读取时可能重启被测件并清空当前覆盖状态；运行前请先确认。自动修复、导入、绑定和上传等操作会改变环境或结果，执行前应了解其影响。
+覆盖标志读取依赖被测件提供兼容接口，并非所有赛题都支持。客户端读分可能重启被测件并清空当前覆盖状态，Agent 应根据具体情况选择方法并保留结果。
 
 ## 历史案例
 
@@ -77,7 +57,7 @@ python scripts/submit.py export <项目ID> <输出ZIP>
 
 ## 常见问题
 
-- **找不到 ETest5**：先运行 `python scripts/et5env.py`，检查安装路径，必要时设置 `ET5_HOME`。
+- **找不到 ETest5**：向 Agent 提供实际安装路径，让它检查并配置 `ET5_HOME`。
 - **工程无法准备环境**：检查导入工程中的通道、串口及虚拟卡 ID 是否与本机一致。
 - **任务显示通过但结果不变**：检查测试脚本中的断言和实际报文，`PASSED` 本身不等于覆盖目标已达成。
 - **报文发出但被测件没有响应**：核对两端串口、波特率、帧格式、启动状态和发送间隔；历史案例中的设置不一定适用于新题。

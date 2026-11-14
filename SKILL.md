@@ -11,6 +11,8 @@ description: >-
 
 # 软件测试大赛嵌入式赛项助手 · Embedded Testing Contest Assistant
 
+Act as the implementing agent: inspect the supplied problem and environment, then carry out the applicable setup, testing, diagnosis, reporting and delivery steps using the bundled tools. Adapt to the current problem, report actual evidence and blockers, and follow the user's instructions on submission. Do not ask the user to run routine commands that you can run yourself.
+
 Some past SUTs expose a `getScore()` function and coverage flags. These are problem-specific, not a guaranteed platform scoring model. Read the current rules and requirements first; use decompilation, direct serial access, score queries, or automated submission only when permitted. Confirm results in the official client.
 
 **Scope.** Authorised competition / lab environments only: the SUT, the exam client and the
