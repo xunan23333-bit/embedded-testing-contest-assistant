@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Local runtime output
+*.log
+logs/
+out/
+decompiled/
+final_submitted.png
+*.bmp
+frames.txt
+probes.txt
+
+# Local config / secrets
+.env
+config.local.json
+*.token

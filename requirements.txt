@@ -1,0 +1,8 @@
+# Most scripts are stdlib-only. These two are needed for the browser side:
+#   submit.py  -- drive the exam client over CDP (upload + write back the score)
+#   score.py   -- fallback: read the score through the exam-client UI
+#   sut.py     -- screen capture uses Pillow
+requests>=2.28
+playwright>=1.40
+pillow>=9.0
+pyserial>=3.5
